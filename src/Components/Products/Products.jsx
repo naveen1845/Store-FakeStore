@@ -1,24 +1,25 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
 import FetchProducts from "../../Services/fetchProducts";
+import CategoryStore from "../../State/CategoryStore";
 
 function Products(){
+    const {category} = CategoryStore();
     const {data, isLoading} = useQuery({
         queryKey: ['product', category],
         queryFn: () => FetchProducts(category),
-        cacheTime: 1000 * 60,
-        staleTime: 1000 * 60
+        cacheTime: 1000 * 60 * 2,
+        staleTime: 1000 * 60 * 2,
     })
 
 
     return(
         <div>
-
             <div className="my-5 px-5 w-full grid grid-cols-4 gap-5">
                 {isLoading && <div>Loading...</div>}
                {data && data.map((product)=>{
                 return(
-                <div key={data.id} className="p-5 bg-white border flex flex-col justify-center items-center gap-5 rounded-3xl">
+                <div key={product.id} className="p-5 bg-white border flex flex-col justify-center items-center gap-5 rounded-3xl">
                     <div className="w-[10rem] h-[10-rem]">
                         <img className="w-full" src={product.image} alt="img" />
                     </div>

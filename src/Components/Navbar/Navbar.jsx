@@ -1,5 +1,17 @@
+import { useQuery } from "react-query";
+import fetchCategory from "../../Services/fetchCategory";
+import CategoryStore from "../../State/CategoryStore";
 function Navbar(){
-    return(
+  const {setCategory} = CategoryStore();
+
+  const {data} = useQuery({
+    queryKey: ['category'],
+    queryFn: () => fetchCategory(),
+
+  })
+
+
+ return(
         <div className="navbar bg-base-100">
   <div className="navbar-start">
     <div className="dropdown">
@@ -20,9 +32,12 @@ function Navbar(){
       <ul
         tabIndex={0}
         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-        <li><a>Homepage</a></li>
-        <li><a>Portfolio</a></li>
-        <li><a>About</a></li>
+         <li ><a onClick={() => setCategory(null)}>All Items</a></li>
+        {data && data.map((category) => {
+          return(
+            <li key={category}><a onClick={() => setCategory(category)}>{category}</a></li>
+          )
+        })}
       </ul>
     </div>
   </div>
